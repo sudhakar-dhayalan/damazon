@@ -1,4 +1,4 @@
-package com.damazon.damazon;
+package com.damazon.backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
