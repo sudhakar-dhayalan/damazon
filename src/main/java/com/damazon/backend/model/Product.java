@@ -1,6 +1,5 @@
 package com.damazon.backend.model;
 
-import com.damazon.backend.enums.Category;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Products {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -21,8 +20,8 @@ public class Products {
     @Size(min = 3, message = "Name must be of at least 3 characters")
     private String name;
 
-    @NotNull(message = "Category field is required")
-    @Enumerated(EnumType.STRING)
-    private Category category;
+//    @NotNull(message = "Category field is required")
+//    @Enumerated(EnumType.STRING)
+//    private Category category;
     private double price;
 }
