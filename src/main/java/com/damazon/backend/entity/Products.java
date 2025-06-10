@@ -1,9 +1,7 @@
 package com.damazon.backend.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.damazon.backend.enums.Category;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -24,6 +22,7 @@ public class Products {
     private String name;
 
     @NotNull(message = "Category field is required")
-    private String category;
+    @Enumerated(EnumType.STRING)
+    private Category category;
     private double price;
 }
