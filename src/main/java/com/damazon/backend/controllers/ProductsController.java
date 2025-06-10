@@ -1,15 +1,25 @@
 package com.damazon.backend.controllers;
 
-import org.springframework.web.bind.annotation.GetMapping;
-        import org.springframework.web.bind.annotation.RequestMapping;
-        import org.springframework.web.bind.annotation.RestController;
+import com.damazon.backend.entity.Products;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("products")
+@RequestMapping("products/")
+@Transactional
 public class ProductsController {
 
     @GetMapping("")
     public String test() {
         return "test";
+    }
+
+    @PostMapping("add")
+    public ResponseEntity<?> addProduct(@Valid @RequestBody Products products) {
+        return new ResponseEntity<>("working",HttpStatus.ACCEPTED);
     }
 }
