@@ -1,4 +1,4 @@
-package com.damazon.backend.entity;
+package com.damazon.backend.model;
 
 import com.damazon.backend.enums.Category;
 import jakarta.persistence.*;

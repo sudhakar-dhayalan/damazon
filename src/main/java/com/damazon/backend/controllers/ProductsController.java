@@ -1,10 +1,8 @@
 package com.damazon.backend.controllers;
 
-import com.damazon.backend.entity.Products;
-import com.damazon.backend.enums.Category;
+import com.damazon.backend.model.Products;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
