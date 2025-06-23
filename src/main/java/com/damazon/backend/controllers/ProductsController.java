@@ -5,14 +5,12 @@ import com.damazon.backend.service.ProductService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("products")
@@ -36,12 +34,16 @@ public class ProductsController {
         return ResponseEntity.ok(productService.updateProduct(product));
     }
 
-    @DeleteMapping("")
+    @DeleteMapping("all")
     public ResponseEntity<?> deleteAllProducts() {
         long countOfAssetsDeleted = productService.deleteAllProducts();
-        Map<String, Object> response = new HashMap<>();
-        response.put("deleted", countOfAssetsDeleted);
+        // Map<String, Object> response = Map.of("deleted", countOfAssetsDeleted);
+        return ResponseEntity.ok(Map.of("deleted", countOfAssetsDeleted));
+    }
 
-        return ResponseEntity.ok(response);
+    @DeleteMapping("{productId}")
+    public ResponseEntity<?> deleteProductById(@PathVariable Integer productId) {
+        productService.deleteProductById(productId);
+        return ResponseEntity.ok("Deleted");
     }
 }

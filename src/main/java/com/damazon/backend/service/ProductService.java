@@ -1,15 +1,13 @@
 package com.damazon.backend.service;
 
+import com.damazon.backend.exception.CustomRunTimeException;
 import com.damazon.backend.model.Product;
 import com.damazon.backend.repo.ProductRepo;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -41,8 +39,8 @@ public class ProductService {
     }
 
     public long deleteAllProducts() {
-        long count = productRepo.findAll().stream().count();
-        productRepo.deleteAll();
+        int count = productRepo.findAll().size();
+        if (count > 0) productRepo.deleteAll();
         return count;
     }
 
@@ -63,5 +61,15 @@ public class ProductService {
                         productRepo.save(p)
                 );
         return savedProduct;
+    }
+
+    public void deleteProductById(Integer productId) {
+        if (productId == null) {
+            throw new CustomRunTimeException("Product with Id : " + productId + " not found", "PRODUCT_ID_NULL", HttpStatus.NOT_ACCEPTABLE);
+        } else if (productRepo.existsById(productId)) {
+            productRepo.deleteById(productId);
+        } else {
+            throw new CustomRunTimeException("Product with Id : " + productId + " not found", "PRODUCT_NOT_FOUND", HttpStatus.NOT_FOUND);
+        }
     }
 }

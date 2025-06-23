@@ -2,6 +2,7 @@ package com.damazon.backend.exception;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import jakarta.servlet.http.HttpServletRequest;
+import org.hibernate.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,19 @@ public class ValidationExceptionHandler {
             errors.put("error", "Malformed JSON request or invalid input format.");
         }
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(CustomRunTimeException.class)
+    public ResponseEntity<?> objectNotFound(HttpServletRequest request, CustomRunTimeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                Map.of(
+                        "error", ex.getErrorCode(),
+                        "path", request.getRequestURI(),
+                        "status", HttpStatus.NOT_FOUND.value(),
+                        "timeStamp", LocalDateTime.now(),
+                        "message", ex.getMessage()
+                )
+        );
     }
 
 }
