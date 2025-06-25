@@ -2,19 +2,17 @@ package com.damazon.backend.controllers;
 
 import com.damazon.backend.model.Product;
 import com.damazon.backend.service.ProductService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("products")
-@Transactional
+@CrossOrigin("http://localhost:8081")
 public class ProductsController {
     @Autowired
     ProductService productService;
