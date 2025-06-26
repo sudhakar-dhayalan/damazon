@@ -10,6 +10,7 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -22,11 +23,12 @@ public class SecurityConfig {
     private MyUserDetailsService myUserDetailsService;
 
     // Internally used by SPRING SECURITY, but now we provide it
+    // This is responsible for validating username, password
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
         provider.setUserDetailsService(myUserDetailsService);
-        provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
+        provider.setPasswordEncoder(new BCryptPasswordEncoder(12));
         return provider;
     }
 
@@ -41,7 +43,14 @@ public class SecurityConfig {
 
                 /* making authentication mandatory for all incoming requests */
                 .authorizeHttpRequests(request ->
-                        request.anyRequest().authenticated()
+                        request
+                                // for only register and login, allow without authenticating
+                                .requestMatchers("register", "login")
+                                .permitAll()
+
+                                // for other requests, authenticate
+                                .anyRequest()
+                                .authenticated()
                 )
 
                 .httpBasic(Customizer.withDefaults())
