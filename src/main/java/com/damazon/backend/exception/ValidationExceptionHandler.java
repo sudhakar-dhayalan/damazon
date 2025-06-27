@@ -48,12 +48,12 @@ public class ValidationExceptionHandler {
     }
 
     @ExceptionHandler(CustomRunTimeException.class)
-    public ResponseEntity<?> objectNotFound(HttpServletRequest request, CustomRunTimeException ex) {
+    public ResponseEntity<?> customRunTimeException(HttpServletRequest request, CustomRunTimeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 Map.of(
                         "error", ex.getErrorCode(),
                         "path", request.getRequestURI(),
-                        "status", HttpStatus.NOT_FOUND.value(),
+                        "status", ex.getStatusCode(),
                         "timeStamp", LocalDateTime.now(),
                         "message", ex.getMessage()
                 )
