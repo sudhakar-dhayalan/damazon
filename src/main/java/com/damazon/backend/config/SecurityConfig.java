@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 .authenticated()
                 )
 
-                .httpBasic(Customizer.withDefaults())
+//                .httpBasic(Customizer.withDefaults())
 
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

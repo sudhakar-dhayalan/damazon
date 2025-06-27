@@ -27,8 +27,9 @@ public class UserController {
 
     @GetMapping("login")
     public String login(@RequestBody User user) {
+        // username must be case-insensitive
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(user.getUserName(), user.getPassword())
+                new UsernamePasswordAuthenticationToken(user.getUserName().toLowerCase(), user.getPassword())
         );
 
         if (authentication.isAuthenticated()) {
