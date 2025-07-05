@@ -1,6 +1,7 @@
 package com.damazon.backend.controllers;
 
 import com.damazon.backend.model.User;
+import com.damazon.backend.service.JwtService;
 import com.damazon.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,7 +19,10 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtService jwtService;
 
     @PostMapping("register")
     public User registerUser(@RequestBody User user) {
@@ -33,7 +37,7 @@ public class UserController {
         );
 
         if (authentication.isAuthenticated()) {
-            return "Success";
+            return jwtService.generateToken(user.getUserName());
         } else {
             return "Failure";
         }
