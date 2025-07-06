@@ -15,6 +15,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration // This annotation is scanned by spring for CONFIGURATION
 @EnableWebSecurity // Using Spring Security
@@ -23,6 +24,9 @@ public class SecurityConfig {
     // Needed to give to DaoProvider, but should implement UserDetailsService provided by SPRING SECURITY
     @Autowired
     private MyUserDetailsService myUserDetailsService;
+
+    @Autowired
+    private JwtFilter jwtFilter;
 
     // Internally used by SPRING SECURITY, but now we provide it
     // This is responsible for validating username, password
@@ -60,6 +64,8 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
+
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
         ;
 
         return http.build();

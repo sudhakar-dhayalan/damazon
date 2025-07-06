@@ -84,7 +84,7 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt-impl</artifactId>
 			<version>0.12.5</version>
-			<scope>compile</scope>
+			<scope>runtime</scope>
 <!--			<scope>runtime</scope>-->
 		</dependency>
 
