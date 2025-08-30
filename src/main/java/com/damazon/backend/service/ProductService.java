@@ -4,6 +4,9 @@ import com.damazon.backend.exception.CustomRunTimeException;
 import com.damazon.backend.model.Product;
 import com.damazon.backend.repo.ProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -71,5 +74,10 @@ public class ProductService {
         } else {
             throw new CustomRunTimeException("Product with Id : " + productId + " not found", "PRODUCT_NOT_FOUND", HttpStatus.NOT_FOUND);
         }
+    }
+
+    public Page<Product> getProductsWithPagination(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        return  productRepo.findAll(pageable);
     }
 }
