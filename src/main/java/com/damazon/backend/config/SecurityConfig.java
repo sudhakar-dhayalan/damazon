@@ -49,7 +49,15 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request
                                 // for only register and login, allow without authenticating
-                                .requestMatchers("register", "login")
+                                .requestMatchers(
+                                        "register",
+                                        "login",
+                                        "swagger-ui/**",
+                                        "v3/api-docs/**",
+                                        "swagger-resources/**",
+                                        "swagger-ui.html",
+                                        "webjars/**"
+                                )
                                 .permitAll()
 
                                 // for other requests, authenticate
