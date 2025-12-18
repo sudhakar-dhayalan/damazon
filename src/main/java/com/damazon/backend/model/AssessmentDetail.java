@@ -25,4 +25,5 @@ public class AssessmentDetail {
     private String company;
     private String profession;
     private Integer score;
+    private Integer totalScore;
 }
