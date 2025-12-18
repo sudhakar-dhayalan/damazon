@@ -2,8 +2,10 @@ package com.damazon.backend.config;
 
 import com.damazon.backend.service.MyUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -17,6 +19,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -45,7 +48,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        // Use allowedOriginPatterns in dev to avoid strict host matching; allow credentials
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://localhost:3000", "http://localhost:8080", "http://localhost:8081"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -53,6 +57,22 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
+    }
+
+    // Register a CorsFilter with highest precedence so CORS is handled before security filters
+    @Bean
+    public FilterRegistrationBean<CorsFilter> corsFilterRegistration() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOriginPatterns(List.of("http://localhost:4200", "http://localhost:3000", "http://localhost:8080", "http://localhost:8081"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+        configuration.setMaxAge(3600L);
+        source.registerCorsConfiguration("/**", configuration);
+        FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
+        bean.setOrder(0);
+        return bean;
     }
 
     // Internally used by SPRING SECURITY, but now we provide it
@@ -72,14 +92,14 @@ public class SecurityConfig {
                         request
                                 // for only register and login, allow without authenticating
                                 .requestMatchers(
-                                        "register",
-                                        "login",
-                                        "assessment/*",
-                                        "swagger-ui/**",
-                                        "v3/api-docs/**",
-                                        "swagger-resources/**",
-                                        "swagger-ui.html",
-                                        "webjars/**"
+                                        "/register",
+                                        "/login",
+                                        "/assessment/**",
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources/**",
+                                        "/swagger-ui.html",
+                                        "/webjars/**"
                                 )
                                 .permitAll()
 
